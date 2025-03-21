@@ -1,0 +1,66 @@
+# pip install -e . --config-settings editable_mode=compat
+
+[tool.black]
+line-length = 150
+
+[build-system]
+requires = ["setuptools>=75.0", "setuptools_scm"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["api_private*"]
+
+[project]
+name = "api_private"
+dynamic = ["version"] 
+authors = [{ name = "Ignifai", email = "jobs@ignifai.net" }]
+description = "Internal API for Ignifai"
+readme = "README.md"
+requires-python = ">=3.12"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.12",
+  "Operating System :: OS Independent",
+]
+dependencies = [
+  'loguru',
+  'pytest',
+  'pytest-env',
+  'pytest-cov',
+  'pytest-asyncio',
+  'pre-commit',
+
+  'fastapi[standard]',
+  'httpx',
+  'passlib',
+  'pyjwt',
+  'async-lru',
+  'python-slugify',
+  'mergedeep',
+]
+
+[tool.setuptools_scm]
+version_file = "api_private/_version.py"
+
+[project.urls]
+Homepage = "https://github.com/ignifai/api-private"
+"Bug Tracker" = "https://github.com/ignifai/api-private/issues"
+
+
+# run tests with python -m pytests (-s to capture stdout)
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "session"
+filterwarnings = [
+    "default",
+    "ignore::DeprecationWarning",
+]
+testpaths = [
+    "tests",
+]
+env=[
+  "AWS_PROFILE=fake_instance_role",
+  "AWS_REGION=eu-west-1",
+  "CONDUCTOR_SECRET_NAME=conductor/config",
+  "MONGODB_SECRET_NAME=mongodb/user",
+  "API_SECRET_NAME=api/config",
+]
